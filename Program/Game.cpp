@@ -1,20 +1,18 @@
 #include "Game.h"
 
-void Game::Run()
+void Game::Initialize()
 {
-	Update();
-	Draw();
 }
 
-void Game::Update()
+void Game::Update(float dt)
 {
-	rect.x += dir.x;
-	rect.y += dir.y;
+	rect.x += (float)dir.x * dt;
+	rect.y += (float)dir.y * dt;
 	if (rect.x + rect.width >= gfx::ScreenWidth || rect.x < 0) dir.x *= -1;
 	if (rect.y + rect.height >= gfx::ScreenHeight || rect.y < 0) dir.y *= -1;
 	if (Mouse::IsLButtonPressed()) {
 		Vector2i p = Mouse::GetMousePos();
-		if (rect.IsContainingPoint(p))
+		if (rect.Contains(p))
 			isRectActive = false;
 		else if (!isRectActive) {
 			rect.x = min(max(0, p.x - rect.width / 2), gfx::ScreenWidth - rect.width - 1);
@@ -27,5 +25,6 @@ void Game::Update()
 void Game::Draw()
 {
 	if(isRectActive)
-		gfx::DrawRect(rect, Colors::RED);
+		gfx::DrawRect(rect, Colors::ORANGE);
+
 }

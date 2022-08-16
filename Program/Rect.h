@@ -3,12 +3,12 @@
 struct Rect
 {
 	Rect() : x(0), y(0), width(0), height(0) {}
-	Rect(int x, int y, int width, int height) : x(x), y(y), width(width), height(height) {}
+	Rect(float x, float y, float width, float height) : x(x), y(y), width(width), height(height) {}
 
-	int x, y, width, height;
+	float x, y, width, height;
 
-	bool IsContainingPoint(Vector2i pt) {
-		return pt.x >= x && pt.x <= x + width && pt.y >= y && pt.y <= y + height;
+	bool Contains(Vector2i pt) {
+		return (float)pt.x >= x && (float)pt.x <= x + width && (float)pt.y >= y && (float)pt.y <= y + height;
 	}
 
 };

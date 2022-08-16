@@ -6,6 +6,7 @@
 struct Color
 {
 public:
+	constexpr Color() : rawColor(0) {}
 	constexpr Color(unsigned char R, unsigned char G, unsigned char B) : rawColor(R << 16u | G << 8u | B) {}
 
 	bool operator==(const Color& other) const {
@@ -25,10 +26,14 @@ private:
 namespace Colors {
 	static constexpr Color BLACK = Color(0, 0, 0);
 	static constexpr Color WHITE = Color(255, 255, 255);
+	static constexpr Color GRAY = Color(128, 128, 128);
 	static constexpr Color RED = Color(255, 0, 0);
 	static constexpr Color GREEN = Color(0, 255, 0);
 	static constexpr Color BLUE = Color(0, 0, 255);
 	static constexpr Color YELLOW = Color(255, 255, 0);
+	static constexpr Color CYAN = Color(0, 255, 255);
+	static constexpr Color MAGENTA = Color(255, 0, 255);
+	static constexpr Color ORANGE = Color(255, 128, 32);
 }
 
 class gfx
@@ -55,7 +60,7 @@ private:
 	HWND handle = 0;
 	BitmapBuffer buffer;
 	static constexpr int BYTES_PER_PIXEL = 4;
-	static constexpr Color backgroundColor = Colors::YELLOW;
+	static constexpr Color backgroundColor = Colors::BLACK;
 private:
 	static void SetWindowHandle(HWND hWnd);
 	static void CopyBufferToWindow(HDC hdc);
@@ -68,7 +73,7 @@ public:
 		DrawRect(pos.x, pos.y, width, height, c);
 	}
 	static void DrawRect(const Rect& rect, Color c) {
-		DrawRect(rect.x, rect.y, rect.width, rect.height, c);
+		DrawRect((int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height, c);
 	}
 };
 

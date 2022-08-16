@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "Mouse.h"
 #include <string>
+#include <chrono>
 
 #define MAX_LOADSTRING 100
 
@@ -14,6 +15,7 @@ HINSTANCE hInst;                                // current instance
 HWND hWnd;
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+std::chrono::steady_clock::time_point timeStamp = std::chrono::steady_clock::now();
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE);
@@ -43,13 +45,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     Game game;
     HDC hdc = GetDC(hWnd);
     Mouse& mouse = Mouse::GetInstance();
-
+    
+    game.Initialize();
     // Main loop:
     while (ProcessMessage())
     {
         gfx::ClearScreen();
-        game.Run();
-        mouse.wasLButtonDown = mouse.isLButtonDown;
+        const std::chrono::steady_clock::time_point old = timeStamp;
+        timeStamp = std::chrono::steady_clock::now();
+        const std::chrono::duration<float> frameTime = timeStamp - old;
+        float elapsedTime = frameTime.count();
+        while (elapsedTime > 0.0f) {
+            const float dt = min(0.0025f, elapsedTime);
+            game.Update(dt);
+            elapsedTime -= dt;
+            mouse.wasLButtonDown = mouse.isLButtonDown;
+        }
+        game.Draw();
         gfx::CopyBufferToWindow(hdc);
     }
 
