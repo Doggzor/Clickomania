@@ -3,6 +3,7 @@
 #include <memory>
 #include "gfx.h"
 #include "Tile.h"
+#include "Random.h"
 
 class Board
 {
@@ -10,10 +11,15 @@ public:
 	Board(int columns, int rows);
 
 	void Draw();
+
+private:
+	Color RandomColor();
 private:
 	std::vector< std::unique_ptr <Tile> > tiles;
-	static constexpr int padding = 1;
-	static constexpr Color tileColors[5] = {
+	int columns, rows;
+	static constexpr int PADDING = 1;
+	static constexpr int MAX_COLORS = 5;
+	static constexpr Color TILE_COLORS[MAX_COLORS] = {
 		Colors::BLUE,
 		Colors::GREEN,
 		Colors::RED,

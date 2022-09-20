@@ -2,6 +2,7 @@
 #include "gfx.h"
 #include "Mouse.h"
 #include "Random.h"
+#include "Board.h"
 
 class Game
 {
@@ -16,10 +17,10 @@ private:
 	void Draw();
 
 private:
-	Random rng;
 
-	Rect rect = { 0, 0, 80, 50 };
-	Vector2i dir = { 180, 180 };
-	bool isRectActive = true;
+	//Rect rect = { 0, 0, 80, 50 };
+	//Vector2i dir = { 180, 180 };
+	//bool isRectActive = true;
+	Board board = Board(12, 18);
 };
 

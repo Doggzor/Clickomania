@@ -8,9 +8,11 @@ public:
 	Tile(Vector2i location, Color color);
 
 	void Draw(Vector2i topleftOffset);
+
+public:
+	static constexpr int SIZE = 25;
 private:
 	Vector2i location;
 	Color color;
-	static constexpr int size = 25;
 };
 
