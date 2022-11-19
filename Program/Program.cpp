@@ -5,7 +5,6 @@
 #include "Program.h"
 #include "Game.h"
 #include "Mouse.h"
-#include <string>
 #include <chrono>
 
 #define MAX_LOADSTRING 100
@@ -50,7 +49,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     // Main loop:
     while (ProcessMessage())
     {
-        gfx::ClearScreen();
         const std::chrono::steady_clock::time_point old = timeStamp;
         timeStamp = std::chrono::steady_clock::now();
         const std::chrono::duration<float> frameTime = timeStamp - old;
@@ -60,7 +58,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             game.Update(dt);
             elapsedTime -= dt;
             mouse.wasLButtonDown = mouse.isLButtonDown;
+            mouse.wasRButtonDown = mouse.isRButtonDown;
         }
+        gfx::ClearScreen();
         game.Draw();
         gfx::CopyBufferToWindow(hdc);
     }
@@ -147,8 +147,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_LBUTTONDOWN:
     {
         POINTS pt = MAKEPOINTS(lParam);
-        //const std::string s = std::to_string(pt.x) + ", " + std::to_string(pt.y) + '\n';
-        //OutputDebugStringA(s.c_str());
         mouse.pos = { pt.x, pt.y };
         mouse.isLButtonDown = true;
     }
@@ -156,6 +154,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_LBUTTONUP:
     {
         mouse.isLButtonDown = false;
+    }
+    break;
+    case WM_RBUTTONDOWN:
+    {
+        POINTS pt = MAKEPOINTS(lParam);
+        mouse.pos = { pt.x, pt.y };
+        mouse.isRButtonDown = true;
+    }
+    break;
+    case WM_RBUTTONUP:
+    {
+        mouse.isRButtonDown = false;
     }
     break;
     case WM_MOUSEMOVE:

@@ -1,6 +1,6 @@
 #pragma once
 #include "Windows.h"
-#include "Vector2i.h"
+#include "Vec2.h"
 class Mouse
 {
 	friend LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -14,16 +14,38 @@ private:
 		static Mouse mouse;
 		return mouse;
 	}
-	Vector2i pos;
-	bool isLButtonDown = false;
-	bool wasLButtonDown = false;
+	Vec2i pos;
+	bool isLButtonDown = false, isRButtonDown = false;
+	bool wasLButtonDown = false, wasRButtonDown = false;
+	bool isInputEnabled = true;
 public:
+	static void EnableInput() {
+		GetInstance().isInputEnabled = true;
+	}
+	static void DisableInput() {
+		GetInstance().isInputEnabled = false;
+	}
 	//Returns whether the left mouse button was pressed this frame
 	static bool IsLButtonPressed() {
 		const Mouse& mouse = GetInstance();
-		return mouse.isLButtonDown && !mouse.wasLButtonDown;
+		return mouse.isLButtonDown && !mouse.wasLButtonDown && mouse.isInputEnabled;
 	}
-	static Vector2i GetMousePos() {
+	static bool IsLButtonDown() {
+		const Mouse& mouse = GetInstance();
+		return mouse.isLButtonDown && mouse.isInputEnabled;
+	}
+	static bool IsRButtonPressed() {
+		const Mouse& mouse = GetInstance();
+		return mouse.isRButtonDown && !mouse.wasRButtonDown && mouse.isInputEnabled;
+	}
+	static bool IsRButtonDown() {
+		const Mouse& mouse = GetInstance();
+		return mouse.isRButtonDown && mouse.isInputEnabled;
+	}
+	static bool IsInputEnabled() {
+		return GetInstance().isInputEnabled;
+	}
+	static Vec2i GetMousePos() {
 		return GetInstance().pos;
 	}
 };
